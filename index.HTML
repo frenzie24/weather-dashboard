@@ -8,7 +8,46 @@
     <title>Weather or Not</title>
 </head>
 
-<body class="bg-black">
+<body class="bg-black h-screen w-screen flex justify-center">
+    <div id="dashboard-container" class="bg-white  mt-4  mb-4 mw-5/6 ">
+        <div id="weather-details-container">
+            <ul id="weather-details-list w-12">
+                <!-- create and append weather details elements here-->
+            </ul>
+        </div>
+        <div id="right-container">
+            <div id="selected-day-container">
+                <div id="current-temp">
+
+                </div>
+                <div id="current-details-container">
+                    <div id="high-temp"></div>
+                    <div id="low-temp"></div>
+                    <div id="rain-chance"></div>
+                    <div id="clouds"></div>
+                </div>
+            </div>
+            <div id="city-container">
+                <header id="city-header"></header>
+                <form>
+                    <input type="text" id="city-input">
+                </form>
+                <ol>
+                    <!-- search history here -->
+                </ol>
+            </div>
+            <div id="forecast-container">
+                <div id="day0"></div>
+                <div id="day1"></div>
+                <div id="day2"></div>
+                <div id="day3"></div>
+                <div id="day4"></div>
+                <div id="day5"></div>
+            </div>
+        </div>
+
+    </div>
+    <!--
     <h1 class="text-3xl font-bold underline">
         Hello world!
     </h1>
@@ -25,9 +64,10 @@
     </div>
     <div class="container mx-auto mt-5 py-5 bg-white w-full">container margin-x auto, padding-y 5 bg-white w-full
         <div class="bg-black my-auto p-5 text-white">bg-white my-auto p-5 text-white</div>
-    </div>
+    </div>-->
 </body>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="./src/scripts/weather.js"></script>
+
 </html>
