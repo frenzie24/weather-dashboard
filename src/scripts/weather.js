@@ -1,7 +1,7 @@
 const APIKey = "417a75b405f51c0868dbac2ee8413f5c";
 
 
-//const currentURL = `https://api.openweathermap.org/data/3.0/onecall?q=${city}&appid=${APIKey}`;
+//const currentURL = `httpss://api.openweathermap.org/data/3.0/onecall?q=${city}&appid=${APIKey}`;
 let weatherData = {};
 const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
@@ -9,7 +9,7 @@ function getCityLatLon(name) {
     name = name.charAt(0).toUpperCase() + name.slice(1);
     let lat, lon;
     console.log("getCityLatLon called")
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${name}&limit=5&appid=${APIKey}`).then(r => r.json()).then(response => {
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${name}&limit=5&appid=${APIKey}`).then(r => r.json()).then(response => {
         try {
             lat = response[0].lat;
             lon = response[0].lon;
@@ -77,7 +77,7 @@ function parseWeatherData(data) {
 
 function getCityWeatherData(lat, lon) {
 
-    let currentURL = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}`;
+    let currentURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}`;
     fetch(currentURL).then(response => response.json()).then(response => {
         weatherData = parseWeatherData(response);
         // convert the unix time string from openweather into something usable
@@ -86,7 +86,7 @@ function getCityWeatherData(lat, lon) {
 
     });
     let forecastData = [];
-    let forecastURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`;
+    let forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`;
     fetch(forecastURL).then(response => response.json()).then(response => {
         /* response.list.forEach(entry => {
              forecastData.push(parseWeatherData(entry));
@@ -107,7 +107,7 @@ function convertToFahrenheit(temp) {
 }
 
 // this function was sourced from 
-// https://stackoverflow.com/a/25867068
+// httpss://stackoverflow.com/a/25867068
 // I modified it for readability.  
 // Takes a passed degree and parses it into a direction string
 function degToCompass(deg) {
