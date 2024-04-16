@@ -26,9 +26,6 @@ function getCityWeatherData() {
             feelsLike: response.main.feels_like,
             humidity: response.main.humidity,
             pressure: response.main.pressure,
-            temp: response.main.temp,
-            highTemp: response.main.temp_max,
-            lowTemp: response.main.temp_min,
             description: response.weather[0].description,
             main: response.weather[0].main,
             wind: {
@@ -38,7 +35,9 @@ function getCityWeatherData() {
             clouds: response.clouds.all,
         };
         // convert the unix time string from openweather into something usable
-     
+        weatherData.temp = convertToFahrenheit(response.main.temp);
+        weatherData.highTemp = convertToFahrenheit(response.main.temp_max);
+        weatherData.lowTemp = convertToFahrenheit(response.main.temp_min);
         weatherData.sunrise = convertUNIXTimestamp(response.sys.sunrise);
         weatherData.sunset = convertUNIXTimestamp(response.sys.sunset);
         debugger;
@@ -47,10 +46,13 @@ function getCityWeatherData() {
     });
 }
 
+function convertToFahrenheit(temp) {
+    return (temp - 273.15 ) * (9/5) + 32;
+}
+
 function setWeatherValues() {
     let feelsLike = $("#feels-like h1");
-    debugger;
-    feelsLike.text(weatherData.feelsLike);
+    $("#feels-like h1").text(weatherData.feelsLike);
 }
 
 function onSearchSubmit(ev) {
