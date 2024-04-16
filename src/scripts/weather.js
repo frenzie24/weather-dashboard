@@ -23,7 +23,6 @@ function convertUNIXTimestamp(unixTimestamp) {
 function getCityWeatherData() {
     fetch(queryURL).then(response => response.json()).then(response => {
         weatherData = {
-            feelsLike: response.main.feels_like,
             humidity: response.main.humidity,
             pressure: response.main.pressure,
             description: response.weather[0].description,
@@ -38,8 +37,10 @@ function getCityWeatherData() {
         weatherData.temp = convertToFahrenheit(response.main.temp);
         weatherData.highTemp = convertToFahrenheit(response.main.temp_max);
         weatherData.lowTemp = convertToFahrenheit(response.main.temp_min);
+        weatherData.feelsLike = convertToFahrenheit(response.main.feels_like);
         weatherData.sunrise = convertUNIXTimestamp(response.sys.sunrise);
         weatherData.sunset = convertUNIXTimestamp(response.sys.sunset);
+        weatherData.wind.deg = degToCompass(response.wind.deg);
         debugger;
         setWeatherValues()
         
@@ -47,11 +48,21 @@ function getCityWeatherData() {
 }
 
 function convertToFahrenheit(temp) {
-    return (temp - 273.15 ) * (9/5) + 32;
+    //converts supplied temp in kelvin to fahrenheit with a limit of a single decimal place
+    return ((temp - 273.15 ) * (9/5) + 32).toFixed(1);
+}
+
+// this function was sourced from 
+// https://stackoverflow.com/a/25867068
+// I modified it for readability.  
+// Takes a passed degree and parses it into a direction string
+function degToCompass(deg) {
+    var index = Math.floor((deg / 22.5) + 0.5);
+    var directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    return directions[(index % 16)];
 }
 
 function setWeatherValues() {
-    let feelsLike = $("#feels-like h1");
     $("#feels-like h1").text(weatherData.feelsLike);
 }
 
