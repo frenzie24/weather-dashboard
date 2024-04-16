@@ -127,12 +127,12 @@ function setWeatherValues() {
     $("#humidity h1").text(weatherData.humidity+"% Humidity");
     $("#wind h1").text("Wind Speed:\n"+weatherData.wind.speed+" m/s");
     $("#wind h2").text("Wind Direction:\n"+weatherData.wind.deg);
-    $("#sunrise h2").text("Sunrise:\n"+weatherData.sunrise);
-    $("#sunset h2").text("Sunset:\n"+weatherData.sunset);
+    $("#sunrise h1").text(weatherData.sunrise);
+    $("#sunset h1").text(weatherData.sunset);
     $("#current-day").text(weekDays[dayjs().day()]);
     $("#temp").text(weatherData.temp + '° F');
-    $("#high-temp").text("High:\n"+weatherData.highTemp+"° F");
-    $("#low-temp").text("High:\n"+weatherData.lowTemp + '° F');
+    $("#high-temp").text(`High:\n${weatherData.highTemp}° F`);
+    $("#low-temp").text("Low:\n"+weatherData.lowTemp + '° F');
     $("#rain-chance").text(weatherData.description);
     $("#clouds").text(weatherData.clouds);
 }
@@ -143,7 +143,7 @@ function setForecastCard(card, data) {
     $(`#${card} h2`).text(`${data.temp}° F`);
     t[0].innerHTML = "Wind Speed:\n"+data.wind.speed+" m/s";
     t[1].innerHTML = (data.wind.deg);
-    t[2].innerHTML = "Cloudiness: "+(data.clouds)+"%";
+    t[2].innerHTML = (data.clouds)+"%";
     $(`#${card} h4`).text(data.description);
 
 }
@@ -217,5 +217,8 @@ $(document).ready(() => {
         $("#city-input").val("Atlanta");
     }
     populateSearchHistory();
-    $("h1").css("font-size", "200%")
+   // $("h1").css("font-size", "200%");
+    $("#forecast-container").css('font-size', '8')
+   
+    
 });
