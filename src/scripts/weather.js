@@ -40,8 +40,14 @@ function convertUNIXTimestampToDay(unixTimestamp) {
 
 // takes passed weather data and returns a single formatted object
 function parseWeatherData(data) {
+    if (!data) return;
+    try {
+        if (data.main == undefined) { debugger; }
+    } catch {
+        debugger;
+    }
     return {
-        humidity: data.main.humidity + "%",
+        humidity: data.main ? data.main.humidity + "%" : "",
         pressure: convertHPatoInHG(data.main.pressure),
         description: data.weather[0].description,
         main: data.weather[0].main,
@@ -63,7 +69,7 @@ function parseWeatherData(data) {
 
 function getCityWeatherData(lat, lon) {
 
-    let currentURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+    let currentURL = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}`;
     fetch(currentURL).then(response => response.json()).then(response => {
         weatherData = parseWeatherData(response);
         // convert the unix time string from openweather into something usable
@@ -79,8 +85,9 @@ function getCityWeatherData(lat, lon) {
          })*/
         j = 0;
         for (let i = 0; i < 5; i++) {
-            j += 8;
             setForecastCard(`day${i}`, parseWeatherData(response.list[j]))
+            j += 8;
+
         }
         debugger;
     })
@@ -115,6 +122,7 @@ function setWeatherValues() {
     $("#sunrise h2").text(weatherData.sunrise);
     $("#sunset h2").text(weatherData.sunset);
     $("#sunset h2").text(weatherData.sunset);
+    $("#current-day").text(weekDays[dayjs().day()]);
     $("#temp").text(weatherData.temp);
     $("#high-temp").text(weatherData.highTemp);
     $("#low-temp").text(weatherData.lowTemp);
@@ -147,19 +155,45 @@ function populateSearchHistory() {
     searches.append(list);
 }
 
+
+function clock() {
+
+
+
+    setInterval(() => {
+        let time = new Date();
+        $("#time").text(time.toLocaleTimeString())
+        $("#date").text(time.toLocaleDateString())
+    })
+}
+
 function onSearchSubmit(ev) {
-    ev.PreventDefault();
+    ev.preventDefault();
 
     let city = $("#city-input").val();
 
     getCityLatLon(city);
     let cities = getItem("cities");
-    cities.push(city);
+    if (!cities) cities = [];
+    let newCity = true;
+    cities.forEach(town => {
+        // if the city is already in the search history dont push 
+        if (city === town) newCity = false;
+    })
+    if (newCity) {
+        cities.push(city);
+    }
     setItem('cities', cities);
     populateSearchHistory();
 }
 
 $(document).ready(() => {
-    $('#city-input').on("submit", onSearchSubmit);
+    //   $('#city-input').on("submit", onSearchSubmit);
+    $('#city-input').on("keydown", function (e) {
+        if (e.keyCode == 13) {
+            onSearchSubmit(e);
+        }
+    });
+    clock();
 });
 getCityLatLon("Atlanta");
