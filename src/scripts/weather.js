@@ -63,7 +63,7 @@ function parseWeatherData(data) {
             speed: data.wind.speed,
             deg: degToCompass(data.wind.deg),
         },
-        clouds: `Cloudiness: ${data.clouds.all}%`,
+        clouds: data.clouds.all,
         temp: convertToFahrenheit(data.main.temp),
         highTemp: convertToFahrenheit(data.main.temp_max),
         lowTemp: convertToFahrenheit(data.main.temp_min),
@@ -134,7 +134,25 @@ function setWeatherValues() {
     $("#high-temp").text(`High:\n${weatherData.highTemp}° F`);
     $("#low-temp").text("Low:\n"+weatherData.lowTemp + '° F');
     $("#rain-chance").text(weatherData.description);
-    $("#clouds").text(weatherData.clouds);
+    $("#clouds").text(`Cloudiness: ${weatherData.clouds}%`);
+    /*
+    let bgcolor = Math.ceil(weatherData.clouds).toString();
+    let bgstring = "bg-slate-"
+    if(bgcolor.length <= 1) {
+        bgstring = bgstring+"50";
+    } else if (bgcolor == "100"){
+        bgstring+="950";
+        $('.bg-white').addClass("text-white");   
+    } else {
+        bgstring += bgcolor+"0";
+        if (bgcolor >= 600) {
+            
+        $('.bg-white').addClass("text-white");   
+        }
+
+    }
+    $('.bg-white').addClass(bgstring);   
+    */
 }
 
 function setForecastCard(card, data) {
