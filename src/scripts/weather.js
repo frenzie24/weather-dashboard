@@ -5,31 +5,52 @@ const queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid
 
 let weatherData = {};
 
+function convertUNIXTimestamp(unixTimestamp) {
+    let date = new Date(unixTimestamp *1000);
+    let hour = date.getHours();
+    let ampm = "AM";
+    if (hour > 12) {
+        hour -= 12;
+        ampm = "PM";
+    }
+    let min = date.getMinutes().toString();
+    min = min.length <= 1 ? "0"+min : min; 
+    let sec = date.getSeconds().toString();
+    sec = sec.length <= 1 ? "0"+sec : sec;
+    return `${hour}:${min}:${sec} ${ampm}`
+}
+
 function getCityWeatherData() {
     fetch(queryURL).then(response => response.json()).then(response => {
         weatherData = {
             feelsLike: response.main.feels_like,
-            humidity: response.main.humidty,
+            humidity: response.main.humidity,
             pressure: response.main.pressure,
             temp: response.main.temp,
             highTemp: response.main.temp_max,
             lowTemp: response.main.temp_min,
-            description: response.weather.description,
-            main: response.weather.main,
+            description: response.weather[0].description,
+            main: response.weather[0].main,
             wind: {
                 speed: response.wind.speed,
                 deg: response.wind.deg,
             },
             clouds: response.clouds.all,
-            sunrise: new Date(response.sys.sunrise).toLocaleDateString(),
-            sunset: new Date(response.sys.sunset).toLocaleDateString()
         };
+        // convert the unix time string from openweather into something usable
+     
+        weatherData.sunrise = convertUNIXTimestamp(response.sys.sunrise);
+        weatherData.sunset = convertUNIXTimestamp(response.sys.sunset);
         debugger;
+        setWeatherValues()
+        
     });
 }
 
 function setWeatherValues() {
-    
+    let feelsLike = $("#feels-like h1");
+    debugger;
+    feelsLike.text(weatherData.feelsLike);
 }
 
 function onSearchSubmit(ev) {
