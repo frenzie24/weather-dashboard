@@ -6,11 +6,19 @@ let weatherData = {};
 const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 function getCityLatLon(name) {
+    name = name.charAt(0).toUpperCase() + name.slice(1);
     let lat, lon;
+    console.log("getCityLatLon called")
     fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${name}&limit=5&appid=${APIKey}`).then(r => r.json()).then(response => {
+      // try{ 
         lat = response[0].lat;
         lon = response[0].lon;
         getCityWeatherData(lat, lon);
+    //}
+      //  catch(e) {
+        //    alert("Error in your city search,\ntry again please.")
+           // console.log(e)
+      //  }
     });
 }
 // converts a unixtimestamp to a formatted time string
@@ -149,7 +157,9 @@ function populateSearchHistory() {
     cities.forEach(city => {
 
         list.push($("<li>").on('click', (ev) => {
-            $("#city-input").val(ev.tar.text());
+            let name = ev.target.textContent;
+            $("#city-input").val(name);
+            getCityLatLon(name);
         }).text(city));
     });
     searches.append(list);
@@ -182,8 +192,9 @@ function onSearchSubmit(ev) {
     })
     if (newCity) {
         cities.push(city);
+        setItem('cities', cities);
     }
-    setItem('cities', cities);
+   
     populateSearchHistory();
 }
 
@@ -195,5 +206,5 @@ $(document).ready(() => {
         }
     });
     clock();
+    populateSearchHistory();
 });
-getCityLatLon("Atlanta");
