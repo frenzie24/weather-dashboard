@@ -1,12 +1,22 @@
 const APIKey = "417a75b405f51c0868dbac2ee8413f5c";
 let city = "atlanta";
 
-const queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
-
+let currentURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+//const currentURL = `https://api.openweathermap.org/data/3.0/onecall?q=${city}&appid=${APIKey}`;
 let weatherData = {};
 
+
+function getCityLatLon(name) {
+    let lat, lon;
+    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${name}&limit=5&appid=${APIKey}`).then(r => r.json()).then(response => {
+        lat = response[0].lat;
+        lon = response[0].lon; 
+        getCityWeatherData(lat, lon); 
+    });
+}
+// converts a unixtimestamp to a formatted time string
 function convertUNIXTimestamp(unixTimestamp) {
-    let date = new Date(unixTimestamp *1000);
+    let date = new Date(unixTimestamp * 1000);
     let hour = date.getHours();
     let ampm = "AM";
     if (hour > 12) {
@@ -14,42 +24,55 @@ function convertUNIXTimestamp(unixTimestamp) {
         ampm = "PM";
     }
     let min = date.getMinutes().toString();
-    min = min.length <= 1 ? "0"+min : min; 
+    min = min.length <= 1 ? "0" + min : min;
     let sec = date.getSeconds().toString();
-    sec = sec.length <= 1 ? "0"+sec : sec;
+    sec = sec.length <= 1 ? "0" + sec : sec;
     return `${hour}:${min}:${sec} ${ampm}`
 }
 
-function getCityWeatherData() {
-    fetch(queryURL).then(response => response.json()).then(response => {
-        weatherData = {
-            humidity: response.main.humidity,
-            pressure: response.main.pressure,
-            description: response.weather[0].description,
-            main: response.weather[0].main,
-            wind: {
-                speed: response.wind.speed,
-                deg: degToCompass(response.wind.deg),
-            },
-            clouds: response.clouds.all,
-        };
-        // convert the unix time string from openweather into something usable
-        weatherData.temp = convertToFahrenheit(response.main.temp);
-        weatherData.highTemp = convertToFahrenheit(response.main.temp_max);
-        weatherData.lowTemp = convertToFahrenheit(response.main.temp_min);
-        weatherData.feelsLike = convertToFahrenheit(response.main.feels_like);
-        weatherData.sunrise = convertUNIXTimestamp(response.sys.sunrise);
-        weatherData.sunset = convertUNIXTimestamp(response.sys.sunset);
+// takes passed weather data and returns a single formatted object
+function parseWeatherData(data) {
+    return {
+        humidity: data.main.humidity + "%",
+        pressure: convertHPatoInHG(data.main.pressure),
+        description: data.weather[0].description,
+        main: data.weather[0].main,
+        wind: {
+            speed: data.wind.speed,
+            deg: degToCompass(data.wind.deg),
+        },
+        clouds: data.clouds.all,
+        temp: convertToFahrenheit(data.main.temp),
+        highTemp: convertToFahrenheit(data.main.temp_max),
+        lowTemp: convertToFahrenheit(data.main.temp_min),
+        feelsLike: convertToFahrenheit(data.main.feels_like),
+        sunrise: convertUNIXTimestamp(data.sys.sunrise),
+        sunset: convertUNIXTimestamp(data.sys.sunset),
+    }
+    
+}
 
-        debugger;
+function getCityWeatherData(lat, lon) {
+    fetch(currentURL).then(response => response.json()).then(response => {
+        weatherData = parseWeatherData(response);
+        // convert the unix time string from openweather into something usable
+
         setWeatherValues()
-        
+
     });
+    let forecastData = [];
+    let forecastURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`;
+    fetch(forecastURL).then(response => response.json()).then(response => {
+        response.list.forEach(entry => {
+            forecastData.push(parseWeatherData(entry));
+        })
+        debugger;
+    })
 }
 
 function convertToFahrenheit(temp) {
     //converts supplied temp in kelvin to fahrenheit with a limit of a single decimal place
-    return ((temp - 273.15 ) * (9/5) + 32).toFixed(1);
+    return ((temp - 273.15) * (9 / 5) + 32).toFixed(1);
 }
 
 // this function was sourced from 
@@ -62,8 +85,9 @@ function degToCompass(deg) {
     return directions[(index % 16)];
 }
 
-function convertHPatoMMHG(pressure) {
-    return (pressure * 0.75006375541921);
+// converts passed pressue in hPa to inHG
+function convertHPatoInHG(pressure) {
+    return (pressure * 0.02952998057228486).toFixed(2) + " inHg";
 }
 
 function setWeatherValues() {
@@ -74,12 +98,22 @@ function setWeatherValues() {
     $("#wind h2").text(weatherData.wind.deg);
     $("#sunrise h2").text(weatherData.sunrise);
     $("#sunset h2").text(weatherData.sunset);
+    $("#sunset h2").text(weatherData.sunset);
+    $("#temp").text(weatherData.temp);
+    $("#high-temp").text(weatherData.highTemp);
+    $("#low-temp").text(weatherData.highTemp);
+    $("#rain-chance").text(weatherData.highTemp);
+    $("#clouds").text(weatherData.highTemp);
+
+
 }
 
 function onSearchSubmit(ev) {
     ev.PreventDefault();
+    
+    getCityLatLon("Atlanta");
     city = $("#city-input").val();
-    getCityWeatherData();
     $("#city-input").val("");
 }
-getCityWeatherData()
+
+getCityLatLon("Atlanta");
