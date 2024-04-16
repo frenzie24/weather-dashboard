@@ -122,18 +122,17 @@ function convertHPatoInHG(pressure) {
 }
 
 function setWeatherValues() {
-    $("#feels-like h1").text(weatherData.feelsLike);
+    $("#feels-like h1").text(weatherData.feelsLike  + '° F') ;
     $("#pressure h1").text(weatherData.pressure);
-    $("#humidity h1").text(weatherData.humidity);
-    $("#wind h1").text(weatherData.wind.speed);
-    $("#wind h2").text(weatherData.wind.deg);
-    $("#sunrise h2").text(weatherData.sunrise);
-    $("#sunset h2").text(weatherData.sunset);
-    $("#sunset h2").text(weatherData.sunset);
+    $("#humidity h1").text(weatherData.humidity+"% Humidity");
+    $("#wind h1").text("Wind Speed:\n"+weatherData.wind.speed+" m/s");
+    $("#wind h2").text("Wind Direction:\n"+weatherData.wind.deg);
+    $("#sunrise h1").text(weatherData.sunrise);
+    $("#sunset h1").text(weatherData.sunset);
     $("#current-day").text(weekDays[dayjs().day()]);
-    $("#temp").text(weatherData.temp);
-    $("#high-temp").text(weatherData.highTemp);
-    $("#low-temp").text(weatherData.lowTemp);
+    $("#temp").text(weatherData.temp + '° F');
+    $("#high-temp").text(`High:\n${weatherData.highTemp}° F`);
+    $("#low-temp").text("Low:\n"+weatherData.lowTemp + '° F');
     $("#rain-chance").text(weatherData.description);
     $("#clouds").text(weatherData.clouds);
 }
@@ -141,10 +140,10 @@ function setWeatherValues() {
 function setForecastCard(card, data) {
     let t = $(`#${card} h3`)
     $(`#${card} h1`).text(data.day);
-    $(`#${card} h2`).text(data.temp);
-    t[0].innerHTML = data.wind.speed;
+    $(`#${card} h2`).text(`${data.temp}° F`);
+    t[0].innerHTML = "Wind Speed:\n"+data.wind.speed+" m/s";
     t[1].innerHTML = (data.wind.deg);
-    t[2].innerHTML = (data.clouds);
+    t[2].innerHTML = (data.clouds)+"%";
     $(`#${card} h4`).text(data.description);
 
 }
@@ -205,7 +204,7 @@ $(document).ready(() => {
             onSearchSubmit(e);
         }
     });
-    clock();
+    //clock();
     let cities = getItem("cities");
     if (cities) {
         getCityLatLon(cities[0]);
@@ -218,4 +217,8 @@ $(document).ready(() => {
         $("#city-input").val("Atlanta");
     }
     populateSearchHistory();
+   // $("h1").css("font-size", "200%");
+    $("#forecast-container").css('font-size', '8')
+   
+    
 });

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    
+    <link rel="stylesheet" href="./src/css/style.css" />
     <title>Weather or Not</title>
 </head>
 
@@ -13,26 +15,26 @@
         <div id="weather-details-container" class="my-3 ml-3 mr-1.5 w-60 max-w-lg border-2 flex">
             <ul id="weather-details-list" class="size-full">
                 <li id="feels-like" class="h-1/6 flex justify-center items-center">
-                    <h1>FEELS LIKE</h1>
+                    <h1 class="text-2xl">FEELS LIKE</h1>
                 </li>
                 <li id="pressure" class="h-1/6 flex justify-center items-center">
-                    <h1>PRESSURE</h1>
+                    <h1 class="text-2xl">PRESSURE</h1>
                 </li>
                 <li id="humidity" class="h-1/6 flex justify-center items-center">
-                    <h1>humidity</h1>
+                    <h1 class="text-2xl">humidity</h1>
                 </li>
                 <li id="wind" class="h-1/6 flex flex-row flex-wrap items-start">
-                    <h1 class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">WIND SPEED</h1>
-                    <h2 class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">WIND DEG</h2>
+                    <h1 class="text-2xl" class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">WIND SPEED</h1>
+                    <h2 class="text-xl p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">WIND DEG</h2>
                   
                 </li>
-                <li id="sunrise" class="h-1/6 flex justify-center items-center">
-                    <h1 class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">Sunrise</h1>
-                    <h2 class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">time</h2>
+                <li id="sunrise" class="h-1/6 flex flex-row flex-wrap justify-center items-start">
+                    <h2 class="text-xl w-full m-0 text-center">Sunrise:</h2>
+                    <h1 class="text-2xl" class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">time</h1>
                 </li>
-                <li id="sunset" class="h-1/6 flex justify-center items-center">
-                    <h1 class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">Sunset</h1>
-                    <h2 class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">time</h2>
+                <li id="sunset" class="h-1/6 flex flex-row flex-wrap justify-center items-start">
+                    <h2 class="text-xl w-full m-0 text-center">Sunset:</h2>
+                    <h1 class="text-2xl" class="p-0 m-0 w-full flex flex-row flex-wrap justify-center items-center">time</h1>
                 </li>
 
                 <!-- create and append weather details elements here-->
@@ -42,8 +44,8 @@
             <div id="selected-container" class="border-2 flex flex-row flex-wrap h-3/5 w-full">
                 <div id="current-container" class="flex flex-row h-4/6 w-full">
                     <div class="border-2 w-3/4 flex flex-row flex-wrap justify-center items-center">
-                        <h2 id="current-day" class="w-full text-center"></h2>
-                        <h1 id="temp" class="w-full text-center">CURRENT TEMP</h1>
+                        <h2 id="current-day" class="w-full text-xl text-center"></h2>
+                        <h1 class="text-2xl" id="temp" class="w-full text-center">CURRENT TEMP</h1>
                         <h3 id="date" class="w-full text-center"></h3>
                         <h3 id="time" class="w-full text-center"></h3>
                     </div>
@@ -59,18 +61,18 @@
                 </div>
                 <div id="current-details-container" class="flex flex-row flex-wrap w-full h-2/6 border-2">
                     <div class="h-full w-1/4 flex justify-center items-center">
-                        <h1 id="high-temp">100F</h1>
+                        <h1 class="text-2xl" id="high-temp">100F</h1>
                     </div>
                     <div class="h-full w-1/4 flex justify-center items-center">
-                        <h1 id="low-temp">0F</h1>
-                    </div>
-
-                    <div class="h-full w-1/4 flex justify-center items-center">
-                        <h1 id="rain-chance">50%</h1>
+                        <h1 class="text-2xl" id="low-temp">0F</h1>
                     </div>
 
                     <div class="h-full w-1/4 flex justify-center items-center">
-                        <h1 id="clouds">cloudy</h1>
+                        <h1 class="text-2xl" id="rain-chance">50%</h1>
+                    </div>
+
+                    <div class="h-full w-1/4 flex justify-center items-center">
+                        <h1 class="text-2xl" id="clouds">cloudy</h1>
                     </div>
 
                 </div>
@@ -78,48 +80,48 @@
             </div>
             <div id="forecast-container" class="flex flex-row h-2/5 border-2 border-yellow-400">
                 <div id="day0" class="w-1/5 h-full border-2 m-1 flex flex-row flex-wrap justify-center items-start">
-                    <h1 class="w-full text-center">Day0</h1>
-                    <h2 class="w-full text-center">temp</h2>
+                    <h1 class="w-full text-xl text-center">Day0</h1>
+                    <h2 class="text-xl w-full text-center">temp</h2>
                     <h3 class="w-full text-center">tempHIGH</h3>
                     <h3 class="w-full text-center">tempLOW</h3>
                     <h3 class="w-full text-center">Clouds</h3>
                     <h4 class="w-full text-center">Rain %</h4>
                 </div>
                 <div id="day1" class="w-1/5 h-full border-2 m-1 flex flex-row flex-wrap justify-center items-start">
-                    <h1 class="w-full text-center">Day1</h1>
-                    <h2 class="w-full text-center">temp</h2>
+                    <h1 class="w-full text-xl text-center">Day1</h1>
+                    <h2 class="text-xl w-full text-center">temp</h2>
                     <h3 class="w-full text-center">tempHIGH</h3>
                     <h3 class="w-full text-center">tempLOW</h3>
                     <h3 class="w-full text-center">Clouds</h3>
                     <h4 class="w-full text-center">Rain %</h4>
                 </div>
                 <div id="day2" class="w-1/5 h-full border-2 m-1 flex flex-row flex-wrap justify-center items-start">
-                    <h1 class="w-full text-center">Day2</h1>
-                    <h2 class="w-full text-center">temp</h2>
+                    <h1 class="w-full text-xl text-center">Day2</h1>
+                    <h2 class="text-xl w-full text-center">temp</h2>
                     <h3 class="w-full text-center">tempHIGH</h3>
                     <h3 class="w-full text-center">tempLOW</h3>
                     <h3 class="w-full text-center">Clouds</h3>
                     <h4 class="w-full text-center">Rain %</h4>
                 </div>
                 <div id="day3" class="w-1/5 h-full border-2 m-1 flex flex-row flex-wrap justify-center items-start">
-                    <h1 class="w-full text-center">Day3</h1>
-                    <h2 class="w-full text-center">temp</h2>
+                    <h1 class="w-full text-xl text-center">Day3</h1>
+                    <h2 class="text-xl w-full text-center">temp</h2>
                     <h3 class="w-full text-center">tempHIGH</h3>
                     <h3 class="w-full text-center">tempLOW</h3>
                     <h3 class="w-full text-center">Clouds</h3>
                     <h4 class="w-full text-center">Rain %</h4>
                 </div>
                 <div id="day4" class="w-1/5 h-full border-2 m-1 flex flex-row flex-wrap justify-center items-start">
-                    <h1 class="w-full text-center">Day4</h1>
-                    <h2 class="w-full text-center">temp</h2>
+                    <h1 class="w-full text-xl text-center">Day4</h1>
+                    <h2 class="text-xl w-full text-center">temp</h2>
                     <h3 class="w-full text-center">tempHIGH</h3>
                     <h3 class="w-full text-center">tempLOW</h3>
                     <h3 class="w-full text-center">Clouds</h3>
                     <h4 class="w-full text-center">Rain %</h4>
                 </div>
               <!--  <div id="day5" class="w-1/6 h-full border-2 m-1 flex flex-row flex-wrap justify-center items-start">
-                    <h1 class="w-full text-center">Day5</h1>
-                    <h2 class="w-full text-center">temp</h2>
+                    <h1 class="w-full text-xl text-center">Day5</h1>
+                    <h2 class="text-xl w-full text-center">temp</h2>
                     <h3 class="w-full text-center">tempHIGH</h3>
                     <h3 class="w-full text-center">tempLOW</h3>
                     <h3 class="w-full text-center">Clouds</h3>
