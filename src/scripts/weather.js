@@ -1,10 +1,9 @@
 const APIKey = "417a75b405f51c0868dbac2ee8413f5c";
 let city = "atlanta";
 
-let currentURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
 //const currentURL = `https://api.openweathermap.org/data/3.0/onecall?q=${city}&appid=${APIKey}`;
 let weatherData = {};
-
+const weekDays = ["Sunday", "Monday","Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
 
 function getCityLatLon(name) {
     let lat, lon;
@@ -30,6 +29,15 @@ function convertUNIXTimestamp(unixTimestamp) {
     return `${hour}:${min}:${sec} ${ampm}`
 }
 
+function convertUNIXTimestampToDay(unixTimestamp) {
+    //let date = new Date(unixTimestamp * 1000);
+    let day = dayjs(unixTimestamp*1000);
+  
+    day = day.day();
+  return weekDays[day];
+  
+}
+
 // takes passed weather data and returns a single formatted object
 function parseWeatherData(data) {
     return {
@@ -41,18 +49,21 @@ function parseWeatherData(data) {
             speed: data.wind.speed,
             deg: degToCompass(data.wind.deg),
         },
-        clouds: data.clouds.all,
+        clouds: `Cloudiness: ${data.clouds.all}%`,
         temp: convertToFahrenheit(data.main.temp),
         highTemp: convertToFahrenheit(data.main.temp_max),
         lowTemp: convertToFahrenheit(data.main.temp_min),
         feelsLike: convertToFahrenheit(data.main.feels_like),
         sunrise: convertUNIXTimestamp(data.sys.sunrise),
         sunset: convertUNIXTimestamp(data.sys.sunset),
+        day: convertUNIXTimestampToDay(data.dt)
     }
     
 }
 
 function getCityWeatherData(lat, lon) {
+    
+let currentURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
     fetch(currentURL).then(response => response.json()).then(response => {
         weatherData = parseWeatherData(response);
         // convert the unix time string from openweather into something usable
@@ -63,9 +74,14 @@ function getCityWeatherData(lat, lon) {
     let forecastData = [];
     let forecastURL = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}`;
     fetch(forecastURL).then(response => response.json()).then(response => {
-        response.list.forEach(entry => {
+       /* response.list.forEach(entry => {
             forecastData.push(parseWeatherData(entry));
-        })
+        })*/
+        j=0;
+        for (let i = 0; i < 5; i++) {
+            j+=8;
+            setForecastCard(`day${i}`, parseWeatherData(response.list[j]))
+        }
         debugger;
     })
 }
@@ -101,11 +117,20 @@ function setWeatherValues() {
     $("#sunset h2").text(weatherData.sunset);
     $("#temp").text(weatherData.temp);
     $("#high-temp").text(weatherData.highTemp);
-    $("#low-temp").text(weatherData.highTemp);
-    $("#rain-chance").text(weatherData.highTemp);
-    $("#clouds").text(weatherData.highTemp);
+    $("#low-temp").text(weatherData.lowTemp);
+    $("#rain-chance").text(weatherData.description);
+    $("#clouds").text(weatherData.clouds);
+}
 
-
+function setForecastCard(card, data) {
+    let t =$(`#${card} h3`)
+    $(`#${card} h1`).text(data.day);
+    $(`#${card} h2`).text(data.temp);
+    t[0].innerHTML = data.wind.speed;
+    t[1].innerHTML=(data.wind.deg);
+    t[2].innerHTML=(data.clouds);
+    $(`#${card} h4`).text(data.description);
+    
 }
 
 function onSearchSubmit(ev) {
@@ -113,7 +138,11 @@ function onSearchSubmit(ev) {
     
     getCityLatLon("Atlanta");
     city = $("#city-input").val();
+    
     $("#city-input").val("");
 }
 
+$(document).ready(() => {
+    $('#city-input').on("submit", onSearchSubmit);
+});
 getCityLatLon("Atlanta");
