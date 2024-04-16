@@ -10,12 +10,12 @@ function getCityLatLon(name) {
     let lat, lon;
     console.log("getCityLatLon called")
     fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${name}&limit=5&appid=${APIKey}`).then(r => r.json()).then(response => {
-       try{ 
-        lat = response[0].lat;
-        lon = response[0].lon;
-        getCityWeatherData(lat, lon);
-    }
-        catch(e) {
+        try {
+            lat = response[0].lat;
+            lon = response[0].lon;
+            getCityWeatherData(lat, lon);
+        }
+        catch (e) {
             alert("Error in your city search,\ntry again please.")
             console.log(e)
         }
@@ -194,7 +194,7 @@ function onSearchSubmit(ev) {
         cities = [city, ...cities];
         setItem('cities', cities);
     }
-   
+
     populateSearchHistory();
 }
 
@@ -206,8 +206,16 @@ $(document).ready(() => {
         }
     });
     clock();
-    
-    getCityLatLon("Atlanta");
-    $("#city-input").val("Atlanta");
+    let cities = getItem("cities");
+    if (cities) {
+        getCityLatLon(cities[0]);
+
+        $("#city-input").val(cities[0]);
+
+    } else {
+        getCityLatLon("Atlanta");
+
+        $("#city-input").val("Atlanta");
+    }
     populateSearchHistory();
 });
