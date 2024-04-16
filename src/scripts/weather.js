@@ -29,7 +29,7 @@ function getCityWeatherData() {
             main: response.weather[0].main,
             wind: {
                 speed: response.wind.speed,
-                deg: response.wind.deg,
+                deg: degToCompass(response.wind.deg),
             },
             clouds: response.clouds.all,
         };
@@ -40,7 +40,7 @@ function getCityWeatherData() {
         weatherData.feelsLike = convertToFahrenheit(response.main.feels_like);
         weatherData.sunrise = convertUNIXTimestamp(response.sys.sunrise);
         weatherData.sunset = convertUNIXTimestamp(response.sys.sunset);
-        weatherData.wind.deg = degToCompass(response.wind.deg);
+
         debugger;
         setWeatherValues()
         
@@ -62,8 +62,18 @@ function degToCompass(deg) {
     return directions[(index % 16)];
 }
 
+function convertHPatoMMHG(pressure) {
+    return (pressure * 0.75006375541921);
+}
+
 function setWeatherValues() {
     $("#feels-like h1").text(weatherData.feelsLike);
+    $("#pressure h1").text(weatherData.pressure);
+    $("#humidity h1").text(weatherData.humidity);
+    $("#wind h1").text(weatherData.wind.speed);
+    $("#wind h2").text(weatherData.wind.deg);
+    $("#sunrise h2").text(weatherData.sunrise);
+    $("#sunset h2").text(weatherData.sunset);
 }
 
 function onSearchSubmit(ev) {
