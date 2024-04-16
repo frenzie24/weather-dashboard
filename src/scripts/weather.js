@@ -206,5 +206,8 @@ $(document).ready(() => {
         }
     });
     clock();
+    
+    getCityLatLon("Atlanta");
+    $("#city-input").val("Atlanta");
     populateSearchHistory();
 });
