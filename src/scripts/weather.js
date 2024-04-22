@@ -149,10 +149,11 @@ function setWeatherValues() {
 function setForecastCard(card, data) {
     let t = $(`#${card} h3`)
     $(`#${card} h1`).text(data.day);
-    $(`#${card} h2`).text(`${data.temp}° F`);
-    t[0].innerHTML = "Wind Speed:\n"+data.wind.speed+" m/s";
-    t[1].innerHTML = (data.wind.deg);
-    t[2].innerHTML = (data.clouds)+"%";
+    $(`#${card} h2`)[0].innerHTML =`Average Temp:<br>${data.temp}° F`;
+    debugger;
+    t[0].innerHTML = `High:<br>${data.highTemp}° F`;
+    t[1].innerHTML = `Low:<br>${data.lowTemp}° F`;
+    t[2].innerHTML = `${data.clouds}%`;
     $(`#${card} h4`).text(data.description);
 
 }
