@@ -40,10 +40,14 @@ function convertUNIXTimestamp(unixTimestamp) {
 function convertUNIXTimestampToDay(unixTimestamp) {
     //let date = new Date(unixTimestamp * 1000);
     let day = dayjs(unixTimestamp * 1000);
-
     day = day.day();
     return weekDays[day];
 
+}
+
+function getWeekday(dateString) {
+    let day = dayjs(dateString);
+    return weekDays[day.day()];
 }
 
 // takes passed weather data and returns a single formatted object
@@ -70,7 +74,7 @@ function parseWeatherData(data) {
         feelsLike: convertToFahrenheit(data.main.feels_like),
         sunrise: convertUNIXTimestamp(data.sys.sunrise),
         sunset: convertUNIXTimestamp(data.sys.sunset),
-        day: convertUNIXTimestampToDay(data.dt)
+        day: getWeekday(data.dt_txt)
     }
 
 }
@@ -91,10 +95,12 @@ function getCityWeatherData(lat, lon) {
         /* response.list.forEach(entry => {
              forecastData.push(parseWeatherData(entry));
          })*/
-        j = 0;
+        j = 1;
         for (let i = 0; i < 5; i++) {
             setForecastCard(`day${i}`, parseWeatherData(response.list[j]))
+            debugger;
             j += 8;
+            if(j>40) {j=39;}
 
         }
         debugger;
@@ -121,6 +127,8 @@ function convertHPatoInHG(pressure) {
     return (pressure * 0.02952998057228486).toFixed(2) + " inHg";
 }
 
+
+// use jquery to set element values
 function setWeatherValues() {
     $("#feels-like h1").text(weatherData.feelsLike  + '° F') ;
     $("#pressure h1").text(weatherData.pressure);
@@ -135,24 +143,7 @@ function setWeatherValues() {
     $("#low-temp").text("Low:\n"+weatherData.lowTemp + '° F');
     $("#rain-chance").text(weatherData.description);
     $("#clouds").text(`Cloudiness: ${weatherData.clouds}%`);
-    /*
-    let bgcolor = Math.ceil(weatherData.clouds).toString();
-    let bgstring = "bg-slate-"
-    if(bgcolor.length <= 1) {
-        bgstring = bgstring+"50";
-    } else if (bgcolor == "100"){
-        bgstring+="950";
-        $('.bg-white').addClass("text-white");   
-    } else {
-        bgstring += bgcolor+"0";
-        if (bgcolor >= 600) {
-            
-        $('.bg-white').addClass("text-white");   
-        }
-
-    }
-    $('.bg-white').addClass(bgstring);   
-    */
+   
 }
 
 function setForecastCard(card, data) {
