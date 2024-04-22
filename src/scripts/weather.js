@@ -151,8 +151,8 @@ function setForecastCard(card, data) {
     $(`#${card} h1`).text(data.day);
     $(`#${card} h2`)[0].innerHTML =`Average Temp:<br>${data.temp}° F`;
     debugger;
-    t[0].innerHTML = `High:<br>${data.highTemp}° F`;
-    t[1].innerHTML = `Low:<br>${data.lowTemp}° F`;
+    t[0].innerHTML = `Feels Like:<br>${data.feelsLike}° F`;
+    t[1].innerHTML = `Pressure:<br>${data.pressure}° F`;
     t[2].innerHTML = `${data.clouds}%`;
     $(`#${card} h4`).text(data.description);
 
