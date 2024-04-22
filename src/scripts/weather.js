@@ -153,7 +153,7 @@ function setForecastCard(card, data) {
     debugger;
     t[0].innerHTML = `Feels Like:<br>${data.feelsLike}° F`;
     t[1].innerHTML = `Pressure:<br>${data.pressure}° F`;
-    t[2].innerHTML = `${data.clouds}%`;
+    t[2].innerHTML = `Cloudiness:<br>${data.clouds}%`;
     $(`#${card} h4`).text(data.description);
 
 }
